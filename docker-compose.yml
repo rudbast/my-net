@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+    db:
+        image: postgres:11
+        volumes:
+            - db-data:/var/lib/postgresql
+            - ./files/data/my-net/migration:/docker-entrypoint-initdb.d/
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: my_net
+        ports:
+            - "5432:5432"
+
+    app:
+        build: .
+        ports:
+            - "8088:8088"
+        depends_on:
+             - "db"
+
+volumes:
+    db-data:
